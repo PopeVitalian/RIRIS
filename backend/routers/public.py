@@ -5,7 +5,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from ..auth import ctx, get_current_user
-from ..models import Listing, User
+from ..models import Listing, Offer, User
 from ..settings import FUELS, PER_PAGE, get_db, parse_money, templates
 
 router = APIRouter()
@@ -81,7 +81,14 @@ def show_listing(request: Request, listing_id: int, db: Session = Depends(get_db
 
     user = get_current_user(request, db)
     my_offer = None
-
+    if user and user.role == "buyer":
+        my_offer = db.scalar(
+            select(Offer).where(
+                Offer.listing_id == listing.id,
+                Offer.buyer_id == user.id,
+                Offer.status == "pending",
+            )
+        )
     return templates.TemplateResponse(
         request,
         "listing_detail.html",
@@ -103,3 +110,33 @@ def show_seller(request: Request, seller_id: int, db: Session = Depends(get_db))
         "seller_public.html",
         {**ctx(request, db), "seller": seller, "listings": listings},
     )
+
+@router.get("/api/listings")
+def api_listings(
+    db: Session = Depends(get_db),
+    make: str = Query("", max_length=50),
+    limit: int = Query(10, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+):
+    stmt = select(Listing).where(Listing.status == "aktivni")
+    if make:
+        stmt = stmt.where(Listing.make == make)
+    total = db.scalar(select(func.count()).select_from(stmt.subquery())) or 0
+    listings = db.scalars(
+        stmt.order_by(Listing.created_at.desc(), Listing.id.desc())
+        .offset(offset).limit(limit)
+    ).all()
+    return {
+        "count": len(listings),
+        "total": total,
+        "listings": [
+            {
+                "id": l.id, "make": l.make, "model": l.model, "year": l.year,
+                "mileage_km": l.mileage_km, "fuel": l.fuel,
+                "transmission": l.transmission, "price_eur": float(l.price_eur),
+                "status": l.status, "seller": l.seller.full_name,
+                "created_at": l.created_at.isoformat(),
+            }
+            for l in listings
+        ],
+    }
