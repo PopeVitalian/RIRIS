@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Prejete ponudbe – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Prejete ponudbe</h1>
+
+{% if not groups %}
+  <p>Nimate še nobene ponudbe.</p>
+{% endif %}
+
+{% for g in groups %}
+  {% set listing = g.listing %}
+  <div class="group">
+    <h3>
+      <a href="/listings/{{ listing.id }}">{{ listing.make }} {{ listing.model }}</a>
+      <span class="badge {{ listing.status }}">{{ listing.status }}</span>
+    </h3>
+    <p class="meta">
+      {{ listing.year }} · {{ listing.fuel }} · {{ listing.mileage_km|km }} · {{ listing.price_eur|eur }}
+      — <strong>{{ g.offers|selectattr('status','equalto','pending')|list|length }}</strong> ponudb v čakanju
+    </p>
+    <table>
+      <tr><th>Kupec</th><th>Znesek</th><th>Sporočilo</th><th>Oddano</th><th>Status</th><th>Dejanja</th></tr>
+      {% for o in g.offers %}
+      <tr>
+        <td>{{ o.buyer.full_name }}<br><small>{{ o.buyer.email }}</small></td>
+        <td>{{ o.amount_eur|eur }}</td>
+        <td>{{ o.message or '—' }}</td>
+        <td>{{ o.created_at.strftime("%d. %m. %Y %H:%M") }}</td>
+        <td><span class="badge {{ o.status }}">{{ o.status }}</span></td>
+        <td class="actions">
+          {% if o.status == 'pending' and listing.status == 'aktivni' %}
+          <form method="post" action="/seller/offers/{{ o.id }}/accept" class="inline"
+                onsubmit="return confirm('S sprejemom te ponudbe bodo vse ostale ponudbe na tem oglasu samodejno zavrnjene. Nadaljujem?');">
+            <button type="submit">Sprejmi</button>
+          </form>
+          <form method="post" action="/seller/offers/{{ o.id }}/reject" class="inline">
+            <button type="submit">Zavrni</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endfor %}
+{% endblock %}
