@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ listing.make }} {{ listing.model }} – AvtoTrg{% endblock %}
+{% block content %}
+<p><a href="/listings">← Nazaj na oglase</a></p>
+<h1>{{ listing.make }} {{ listing.model }} – {{ listing.price_eur|eur }}
+  <span class="badge {{ listing.status }}">{{ listing.status }}</span>
+</h1>
+
+<dl>
+  <dt>Letnik</dt><dd>{{ listing.year }}</dd>
+  <dt>Prevoženo</dt><dd>{{ listing.mileage_km|km }}</dd>
+  <dt>Gorivo</dt><dd>{{ listing.fuel }}</dd>
+  <dt>Menjalnik</dt><dd>{{ listing.transmission }}</dd>
+  <dt>Objavljeno</dt><dd>{{ listing.created_at.strftime("%d. %m. %Y") }}</dd>
+  <dt>Prodajalec</dt>
+  <dd>
+    <a href="/sellers/{{ listing.seller.id }}">{{ listing.seller.full_name }}</a>,
+    {{ listing.seller.city }}
+    {% if listing.seller.is_dealer %} (avtohiša){% endif %}
+  </dd>
+</dl>
+
+{% if listing.description %}<p>{{ listing.description }}</p>{% endif %}
+
+{% if user and user.role == 'buyer' and listing.status == 'aktivni' and listing.seller_id != user.id %}
+  {% if my_offer %}
+    <p class="flash success">Imate ponudbo v čakanju v višini {{ my_offer.amount_eur|eur }}.
+      <a href="/buyer/offers">Pregled ponudb</a></p>
+  {% else %}
+    <h2>Oddaj ponudbo</h2>
+    <form method="post" action="/listings/{{ listing.id }}/offers" class="form">
+      <label>Znesek (EUR) <input name="amount_eur" required></label>
+      <label>Sporočilo <textarea name="message" rows="3"></textarea></label>
+      <button type="submit">Pošlji ponudbo</button>
+    </form>
+  {% endif %}
+{% elif not user %}
+  <p><a href="/auth/login">Prijavite se</a> kot kupec, da oddate ponudbo.</p>
+{% endif %}
+
+{% if user and user.role == 'seller' and listing.seller_id == user.id %}
+  <p class="actions">
+    <a href="/seller/listings/{{ listing.id }}/edit">Uredi</a>
+    <form method="post" action="/seller/listings/{{ listing.id }}/delete" class="inline">
+      <button type="submit">Izbriši</button>
+    </form>
+    {% if listing.status == 'rezerviran' %}
+    <form method="post" action="/seller/listings/{{ listing.id }}/sold" class="inline">
+      <button type="submit">Označi kot prodan</button>
+    </form>
+    {% endif %}
+  </p>
+{% endif %}
+{% endblock %}
