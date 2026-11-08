@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ listing.make }} {{ listing.model }} – AvtoTrg{% endblock %}
+{% block content %}
+<p><a href="/listings">← Nazaj na oglase</a></p>
+<h1>{{ listing.make }} {{ listing.model }} – {{ listing.price_eur|eur }}
+  <span class="badge {{ listing.status }}">{{ listing.status }}</span>
+</h1>
+
+<dl>
+  <dt>Letnik</dt><dd>{{ listing.year }}</dd>
+  <dt>Prevoženo</dt><dd>{{ listing.mileage_km|km }}</dd>
+  <dt>Gorivo</dt><dd>{{ listing.fuel }}</dd>
+  <dt>Menjalnik</dt><dd>{{ listing.transmission }}</dd>
+  <dt>Objavljeno</dt><dd>{{ listing.created_at.strftime("%d. %m. %Y") }}</dd>
+  <dt>Prodajalec</dt>
+  <dd>
+    <a href="/sellers/{{ listing.seller.id }}">{{ listing.seller.full_name }}</a>,
+    {{ listing.seller.city }}
+    {% if listing.seller.is_dealer %} (avtohiša){% endif %}
+  </dd>
+</dl>
+
+{% if listing.description %}<p>{{ listing.description }}</p>{% endif %}
+
+{% endblock %}
