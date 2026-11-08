@@ -55,3 +55,6 @@ class User(Base):
     is_dealer: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_blocked: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     created_at: Mapped[datetime] = mapped_column(nullable=False)
+
+    def check_password(self, password: str) -> bool:
+        return verify_password(password, self.password_hash)
