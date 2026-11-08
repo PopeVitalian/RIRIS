@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Prijava – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Prijava</h1>
+
+<form method="post" action="/auth/login" class="form">
+  <label>E-pošta <input name="email" type="email" required></label>
+  <label>Geslo <input name="password" type="password" required></label>
+  <button type="submit">Prijava</button>
+</form>
+
+<p>Še nimate računa? <a href="/auth/register">Registrirajte se.</a></p>
+{% endblock %}

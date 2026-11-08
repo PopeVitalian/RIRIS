@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Registracija – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Registracija</h1>
+
+<form method="post" action="/auth/register" class="form">
+  <label>Ime in priimek <input name="full_name" required></label>
+  <label>E-pošta <input name="email" type="email" required></label>
+  <label>Kraj <input name="city" required></label>
+  <label>Geslo <input name="password" type="password" minlength="8" required></label>
+  <label>Potrditev gesla <input name="password_confirm" type="password" minlength="8" required></label>
+  <label>Vloga
+    <select name="role">
+      <option value="buyer">Kupec</option>
+      <option value="seller">Prodajalec</option>
+    </select>
+  </label>
+  <label class="check"><input type="checkbox" name="is_dealer" value="1"> Avtohiša (samo za prodajalce)</label>
+  <button type="submit">Registracija</button>
+</form>
+
+<p>Že imate račun? <a href="/auth/login">Prijavite se.</a></p>
+{% endblock %}
