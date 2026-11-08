@@ -62,6 +62,9 @@ class User(Base):
         passive_deletes=True,
         foreign_keys="Listing.seller_id",
     )
+    offers: Mapped[list["Offer"]] = relationship(
+        back_populates="buyer", foreign_keys="Offer.buyer_id"
+    )
 
     def check_password(self, password: str) -> bool:
         return verify_password(password, self.password_hash)
@@ -94,3 +97,29 @@ class Listing(Base):
     updated_at: Mapped[datetime] = mapped_column(nullable=False)
 
     seller: Mapped[User] = relationship(back_populates="listings", foreign_keys=[seller_id])
+    offers: Mapped[list["Offer"]] = relationship(
+        back_populates="listing", cascade="all, delete-orphan", passive_deletes=True
+    )
+
+class Offer(Base):
+    __tablename__ = "offers"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    listing_id: Mapped[int] = mapped_column(
+        ForeignKey("listings.id", ondelete="CASCADE"), nullable=False
+    )
+    buyer_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="RESTRICT"), nullable=False
+    )
+    amount_eur: Mapped[Decimal] = mapped_column(nullable=False)
+    message: Mapped[Optional[str]] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(
+        SaEnum(*OFFER_STATUSES, name="offer_status", create_type=False),
+        nullable=False,
+        default="pending",
+    )
+    created_at: Mapped[datetime] = mapped_column(nullable=False)
+    decided_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+
+    listing: Mapped[Listing] = relationship(back_populates="offers")
+    buyer: Mapped[User] = relationship(back_populates="offers", foreign_keys=[buyer_id])

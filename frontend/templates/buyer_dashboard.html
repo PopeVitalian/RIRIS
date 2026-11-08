@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Moj profil – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Pozdravljeni, {{ user.full_name }}</h1>
+
+<div class="stats">
+  <div class="stat"><div class="label">Ponudbe v čakanju</div><div class="value">{{ counts.pending }}</div></div>
+  <div class="stat"><div class="label">Sprejete ponudbe</div><div class="value">{{ counts.accepted }}</div></div>
+</div>
+
+<p><a href="/listings">Brskaj oglase</a> · <a href="/buyer/offers">Vse moje ponudbe</a></p>
+
+<h2>Zadnjih 10 ponudb</h2>
+<table>
+  <tr><th>Oglas</th><th>Znesek</th><th>Status</th><th>Oddano</th></tr>
+  {% for o in recent %}
+  <tr>
+    <td><a href="/listings/{{ o.listing.id }}">{{ o.listing.make }} {{ o.listing.model }}</a></td>
+    <td>{{ o.amount_eur|eur }}</td>
+    <td><span class="badge {{ o.status }}">{{ o.status }}</span></td>
+    <td>{{ o.created_at.strftime("%d. %m. %Y %H:%M") }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="4">Nimate še nobene ponudbe.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
