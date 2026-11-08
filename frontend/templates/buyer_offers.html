@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Moje ponudbe – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Moje ponudbe</h1>
+
+<form class="search" method="get" action="/buyer/offers">
+  <label>Status
+    <select name="status">
+      <option value="">— vsi —</option>
+      {% for s in statuses %}
+      <option value="{{ s }}" {% if status_filter == s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button type="submit">Filtriraj</button>
+  {% if status_filter %}<a href="/buyer/offers">Počisti</a>{% endif %}
+</form>
+
+<table>
+  <tr><th>Oglas</th><th>Znesek</th><th>Sporočilo</th><th>Status</th><th>Oddano</th><th>Odločeno</th><th></th></tr>
+  {% for o in offers %}
+  <tr>
+    <td><a href="/listings/{{ o.listing.id }}">{{ o.listing.make }} {{ o.listing.model }}</a></td>
+    <td>{{ o.amount_eur|eur }}</td>
+    <td>{{ o.message or '—' }}</td>
+    <td><span class="badge {{ o.status }}">{{ o.status }}</span></td>
+    <td>{{ o.created_at.strftime("%d. %m. %Y %H:%M") }}</td>
+    <td>{{ o.decided_at.strftime("%d. %m. %Y %H:%M") if o.decided_at else '—' }}</td>
+    <td>
+      {% if o.status == 'pending' %}
+      <form method="post" action="/offers/{{ o.id }}/withdraw" class="inline">
+        <button type="submit">Umakni</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7">Ni ponudb.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
