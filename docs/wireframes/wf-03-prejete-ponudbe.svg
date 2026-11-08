@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <rect width="1000" height="720" fill="#f3f4f6"/>
+  <rect x="20" y="20" width="960" height="680" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
+
+  <!-- top bar -->
+  <line x1="20" y1="90" x2="980" y2="90" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="50" y="60" font-size="22" font-weight="700" fill="#111827">AvtoTrg</text>
+  <text x="400" y="60" font-size="13" fill="#374151">Moji oglasi</text>
+  <text x="500" y="60" font-size="13" fill="#2563eb" font-weight="600">Prejete ponudbe</text>
+  <text x="900" y="60" font-size="13" fill="#374151">Avtohiša Novak</text>
+  <text x="960" y="60" font-size="13" fill="#2563eb" text-anchor="end">Odjava</text>
+  <text x="980" y="130" font-size="12" fill="#9ca3af" text-anchor="end">WF-06 · Prejete ponudbe</text>
+
+  <text x="50" y="155" font-size="24" font-weight="700" fill="#111827">Prejete ponudbe</text>
+
+  <!-- listing header card -->
+  <rect x="50" y="180" width="900" height="70" fill="#fafafa" stroke="#d1d5db" stroke-width="1" rx="6"/>
+  <text x="70" y="210" font-size="15" font-weight="600" fill="#111827">Volkswagen Golf 2.0 TDI</text>
+  <text x="70" y="230" font-size="12" fill="#6b7280">2019 · dizel · 87.500 km · 12.500 €</text>
+  <rect x="470" y="200" width="70" height="24" fill="#dcfce7" stroke="#16a34a" stroke-width="1" rx="12"/>
+  <text x="505" y="217" font-size="11" font-weight="600" fill="#166534" text-anchor="middle">aktivni</text>
+  <text x="920" y="215" font-size="13" fill="#374151" text-anchor="end"><tspan font-weight="700">3</tspan> ponudbe v čakanju</text>
+
+  <!-- table header -->
+  <rect x="50" y="270" width="900" height="36" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="70" y="293" font-size="11" font-weight="600" fill="#374151">KUPEC</text>
+  <text x="230" y="293" font-size="11" font-weight="600" fill="#374151">ZNESEK</text>
+  <text x="330" y="293" font-size="11" font-weight="600" fill="#374151">SPOROČILO</text>
+  <text x="620" y="293" font-size="11" font-weight="600" fill="#374151">ČAS</text>
+  <text x="710" y="293" font-size="11" font-weight="600" fill="#374151">STATUS</text>
+  <text x="800" y="293" font-size="11" font-weight="600" fill="#374151">DEJANJA</text>
+
+  <!-- row 1 -->
+  <rect x="50" y="306" width="900" height="60" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="70" y="330" font-size="13" font-weight="600" fill="#111827">Janez Novak</text>
+  <text x="70" y="347" font-size="11" fill="#6b7280">janez@email.si</text>
+  <text x="230" y="330" font-size="13" font-weight="600" fill="#111827">12.000 €</text>
+  <text x="330" y="330" font-size="12" fill="#374151">Ponujam 12.000 €, prevzem v roku</text>
+  <text x="330" y="347" font-size="12" fill="#374151">enega tedna. Sem resen kupec.</text>
+  <text x="620" y="337" font-size="12" fill="#6b7280">2 uri nazaj</text>
+  <rect x="710" y="325" width="70" height="22" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="11"/>
+  <text x="745" y="340" font-size="10" font-weight="600" fill="#92400e" text-anchor="middle">pending</text>
+  <rect x="800" y="322" width="65" height="28" fill="#16a34a" rx="3"/>
+  <text x="832" y="340" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Sprejmi</text>
+  <rect x="875" y="322" width="60" height="28" fill="#ffffff" stroke="#dc2626" stroke-width="1" rx="3"/>
+  <text x="905" y="340" font-size="11" font-weight="600" fill="#dc2626" text-anchor="middle">Zavrni</text>
+
+  <!-- row 2 -->
+  <rect x="50" y="366" width="900" height="60" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="70" y="390" font-size="13" font-weight="600" fill="#111827">Maja Kovač</text>
+  <text x="70" y="407" font-size="11" fill="#6b7280">maja@email.si</text>
+  <text x="230" y="390" font-size="13" font-weight="600" fill="#111827">11.800 €</text>
+  <text x="330" y="390" font-size="12" fill="#374151">Ponujam takoj, plačam v gotovini.</text>
+  <text x="330" y="407" font-size="12" fill="#374151">Ali je možno ogledati v soboto?</text>
+  <text x="620" y="397" font-size="12" fill="#6b7280">5 ur nazaj</text>
+  <rect x="710" y="385" width="70" height="22" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="11"/>
+  <text x="745" y="400" font-size="10" font-weight="600" fill="#92400e" text-anchor="middle">pending</text>
+  <rect x="800" y="382" width="65" height="28" fill="#16a34a" rx="3"/>
+  <text x="832" y="400" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Sprejmi</text>
+  <rect x="875" y="382" width="60" height="28" fill="#ffffff" stroke="#dc2626" stroke-width="1" rx="3"/>
+  <text x="905" y="400" font-size="11" font-weight="600" fill="#dc2626" text-anchor="middle">Zavrni</text>
+
+  <!-- row 3 -->
+  <rect x="50" y="426" width="900" height="60" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="70" y="450" font-size="13" font-weight="600" fill="#111827">Tomaž Zupan</text>
+  <text x="70" y="467" font-size="11" fill="#6b7280">tomaz@email.si</text>
+  <text x="230" y="450" font-size="13" font-weight="600" fill="#111827">11.500 €</text>
+  <text x="330" y="450" font-size="12" fill="#374151">Kaj je vaša zadnja cena?</text>
+  <text x="620" y="457" font-size="12" fill="#6b7280">1 dan nazaj</text>
+  <rect x="710" y="445" width="70" height="22" fill="#fef3c7" stroke="#d97706" stroke-width="1" rx="11"/>
+  <text x="745" y="460" font-size="10" font-weight="600" fill="#92400e" text-anchor="middle">pending</text>
+  <rect x="800" y="442" width="65" height="28" fill="#16a34a" rx="3"/>
+  <text x="832" y="460" font-size="11" font-weight="600" fill="#ffffff" text-anchor="middle">Sprejmi</text>
+  <rect x="875" y="442" width="60" height="28" fill="#ffffff" stroke="#dc2626" stroke-width="1" rx="3"/>
+  <text x="905" y="460" font-size="11" font-weight="600" fill="#dc2626" text-anchor="middle">Zavrni</text>
+
+  <!-- info hint -->
+  <rect x="50" y="520" width="900" height="60" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="6"/>
+  <text x="70" y="545" font-size="12" font-weight="600" fill="#1e40af">ⓘ Ob sprejemu ene ponudbe se vse ostale ponudbe na tem oglasu</text>
+  <text x="70" y="563" font-size="12" fill="#1e40af">samodejno zavrnejo, oglas pa preide v status «rezerviran».</text>
+
+  <!-- annotation -->
+  <text x="980" y="640" font-size="11" fill="#9ca3af" font-style="italic" text-anchor="end">↳ US-09, US-10</text>
+</svg>

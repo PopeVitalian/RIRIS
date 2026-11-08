@@ -2,73 +2,57 @@
 
 ## Ime rešitve
 
-**Parkelj** – spletna platforma za upravljanje parkirišč v več mestih.
+**AvtoTrg** – spletna platforma za trgovanje z rabljenimi avtomobili v Sloveniji.
 
 ## Namen rešitve in problem
 
-V Sloveniji obstaja več ločenih aplikacij in sistemov za plačevanje
-parkirnin. Vsako mesto, občina ali zasebni upravljavec parkirišč ima
-pogosto svojo aplikacijo, svoj račun in svoj način plačila. Za voznika
-to pomeni, da mora imeti nameščenih več aplikacij, več uporabniških
-računov in več načinov plačila, tudi če parkira samo občasno v različnih
-mestih.
+Slovenski trg rabljenih avtomobilov je razdrobljen. Kupci brskajo po več portalih hkrati (npr. avto.net, bolha.com, Facebook skupine), kjer kakovost oglasov niha, cene pa so pogosto okvirne. Ko kupec najde zanimiv avto, stik s prodajalcem poteka prek telefona ali e-pošte, brez jasne strukture: ni zapisa o tem, kaj je bilo ponujeno, kdaj in pod kakšnimi pogoji. Prodajalci (predvsem zasebniki) prejemajo ponudbe razpršeno, težko jih je primerjati in pogosto izgubijo sled, katera ponudba je bila sprejeta.
 
-Rešitve, ki poskušajo ta problem poenotiti (npr. EasyPark), to storijo
-tako, da uvedejo svoje storitvene tarife in provizije, ki jih
-upravljavcem parkirišč in posledično voznikom zaračunajo povrhu
-parkirnine. Vozniki tako plačujejo več, upravljavci pa so vezani na
-posrednika.
+AvtoTrg naslavlja ta problem z enotno platformo, kjer:
 
-Parkelj naslavlja ta problem z enotno spletno platformo za več mest
-in več upravljavcev hkrati.
+- kupec odds **strukturirano ponudbo** na posamezen oglas (znesek + sporočilo),
+- prodajalec vidi **vse prejete ponudbe na svoje oglase** na enem mestu,
+- ob sprejemu ponudbe sistem **samodejno zavrne preostale** ponudbe in oglas preide v status `rezerviran`,
+- po prodaji se oglas zapre v status `prodan`, ponudbe in zgodovina ostanejo sledljivi.
+
+Rešitev ne uvaja posredniških provizij – prodajalec obdrži polno ceno, kupec pa ima vpogled v to, kaj in kdaj je ponudil.
 
 ## Ciljni uporabniki
 
-Parkelj je namenjen trem skupinam ljudi.
+**Kupci rabljenih avtomobilov.** Posamezniki, ki iščejo vozilo zase ali za družino in želijo ponudbo oddati hitro, brez klicev in dogovarjanja prek več kanalov. Zanima jih predvsem: filtriranje po znamki, modelu, gorivu in ceni; jasen pregled lastnih oddanih ponudb in njihovega statusa.
 
-Prva skupina so vozniki, ki parkirajo v več različnih mestih in
-želijo za vsa parkiranja uporabiti eno aplikacijo, en račun in en
-način plačila. To so pogosto dnevni migranti, študenti, dostavljavci
-in občasni obiskovalci mest, ki jih moti, da morajo za vsako mesto
-posebej iskati aplikacijo in ustvarjati nov račun.
+**Prodajalci rabljenih avtomobilov.** Dve podskupini:
 
-Druga skupina so upravljavci parkirišč, občine, zasebna podjetja
-in posamezna parkirišča, ki želijo ponuditi svoje storitve v skupni
-platformi, brez da bi plačevali provizije posrednikom in brez da bi
-razvijali svojo aplikacijo. Sem spadajo tako upravljavci javnih
-parkirišč kot tudi upravljavci zasebnih garaž in parkirišč ob
-trgovskih centrih.
+- zasebni prodajalci, ki prodajo en ali dva avtomobila na leto;
+- avtohiše in manjši trgovci, ki imajo hkrati aktivnih več oglasov in potrebujejo pregled nad prejetimi ponudbami.
 
-Tretja skupina so operaterji na terenu, ki fizično nadzorujejo
-parkirišča in potrebujejo preprosto orodje za preverjanje veljavnosti
-parkiranja, izdajanje kazni in spremljanje zasedenosti v živo.
+Oboji potrebujejo: enostavno objavo oglasa, pregled ponudb na enem mestu, jasno odločitev (sprejmi/zavrni) in status oglasa, ki odraža dejansko stanje (aktiven, rezerviran, prodan).
+
+**Administratorji.** Skrbniki platforme, ki skrbijo za red: blokirajo sumljive uporabnike, odstranjujejo sporne oglase in pregledujejo celotno stanje sistema.
 
 ## Kratek opis delovanja
 
-Tipičen potek uporabe za voznika:
+Tipičen potek za kupca:
 
-1. Voznik se registrira in doda svoje vozilo (registrska tablica,
-   znamka, model, tip).
-2. Ob prihodu na parkirišče v brskalniku zažene novo parkirno sejo:
-   izbere vozilo in vnese predvideno trajanje parkiranja (npr. 2 uri).
-3. Sistem ustvari parkirno sejo s statusom `pending` in izračuna
-   predvideni znesek glede na urno ceno parkirišča.
-4. Na rampi (simuliran terminal) operater ali terminal preveri
-   registrsko tablico. Če veljavna seja obstaja, se rampa odpre in seja
-   preide v status `active`.
-5. Med parkiranjem operater obhodi parkirišče in preveri
-   posamezna vozila. Če vozilo nima veljavne seje, operater izda kazen.
-6. Ob odhodu voznik zaključi sejo v aplikaciji, ali pa terminal na
-   rampi samodejno zazna izstop in sejo zaključi. Če je predvideni čas
-   že potekel, se obračuna dodatna parkirnina za prekoračitev, pri čemer velja 15-minutni tolerančni prag.
-7. Sistem izračuna končni znesek in ustvari zapis o plačilu. Voznik
-   plačilo označi kot plačano.
-8. Če voznik nabere tri kazni, se njegov račun samodejno
-   blokira. Administrator ga lahko ročno odblokira.
+1. Kupec se registrira in se prijavi.
+2. Na domači strani brska po oglasih, uporabi iskanje ali filtre (znamka, model, gorivo, cenovni razpon).
+3. Odpre posamezen oglas in vidi vse podatke o vozilu, ceno in prodajalca.
+4. Pod oglasom odda ponudbo: vnese znesek in sporočilo (npr. "Ponujam 12.500 €, prevzem v roku tedna dni").
+5. Ponudba dobi status `pending`; kupec jo vidi v svoji zgodovini ponudb in jo lahko umakne, dokler je še `pending`.
+6. Ko prodajalec ponudbo sprejme, ponudba preide v `accepted`, vse ostale `pending` ponudbe na istem oglasu pa v `rejected`, oglas pa v `rezerviran`.
 
-Tipičen potek za operaterja in administratorja:
+Tipičen potek za prodajalca:
 
-- Operater vidi samo svoje parkirišče: zasedenost, aktivne seje in
-  seznam vozil. Lahko izdaja kazni in ročno preverja tablice.
-- Administrator vidi vsa parkirišča v vseh mestih, upravlja cene,
-  kapacitete, uporabnike in vloge.
+1. Prodajalec se registrira (pri registraciji izbere vlogo "Prodajalec" ali pa pozneje zahteva nadgradnjo prek gumba "Postani prodajalec"; admin lahko vlogo spremeni tudi ročno).
+2. Objavi oglas: znamka, model, letnik, prevoženi kilometri, gorivo, menjalnik, cena, opis.
+3. Oglas dobi status `aktivni` in se prikaže na seznamu.
+4. Prodajalec spremlja prejete ponudbe – za vsako vidi znesek, sporočilo kupca in čas oddaje.
+5. Ponudbo lahko **sprejme** ali **zavrne**. Ob sprejemu sistem samodejno zavrne ostale ponudbe in oglas preide v `rezerviran`.
+6. Po zaključeni prodaji prodajalec označi oglas kot `prodan`.
+
+Tipičen potek za administratorja:
+
+- Admin vidi seznam vseh uporabnikov in vseh oglasov.
+- Uporabnika lahko blokira (npr. ob sumu na prevaro) in ga pozneje odblokira.
+- Oglas lahko blokira ali odstrani.
+- Admin ne kupuje in ne prodaja – njegove pravice so omejene na upravljanje platforme.

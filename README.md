@@ -2,13 +2,9 @@
 
 Vaje predmeta "Razvoj informacijskih rešitev in storitev" na FERI.
 
-**Parkelj** – spletna platforma za upravljanje parkirišč v več mestih: vozniki, operaterji in administratorji na enem mestu.
+# AvtoTrg
 
-## Tehnologije
-
-- **Backend:** Python, Flask, SQLAlchemy, Flask-Migrate, Flask-Login
-- **Frontend:** Jinja predloge, Bootstrap
-- **Baza:** CockroachDB (lokalno v Dockerju)
+spletna platforma za trgovanje z rabljenimi avtomobili
 
 ## Dokumentacija
 
