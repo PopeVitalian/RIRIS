@@ -22,4 +22,17 @@
 
 {% if listing.description %}<p>{{ listing.description }}</p>{% endif %}
 
+{% if user and user.role == 'seller' and listing.seller_id == user.id %}
+  <p class="actions">
+    <a href="/seller/listings/{{ listing.id }}/edit">Uredi</a>
+    <form method="post" action="/seller/listings/{{ listing.id }}/delete" class="inline">
+      <button type="submit">Izbriši</button>
+    </form>
+    {% if listing.status == 'rezerviran' %}
+    <form method="post" action="/seller/listings/{{ listing.id }}/sold" class="inline">
+      <button type="submit">Označi kot prodan</button>
+    </form>
+    {% endif %}
+  </p>
+{% endif %}
 {% endblock %}
