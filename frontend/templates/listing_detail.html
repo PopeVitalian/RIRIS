@@ -22,22 +22,6 @@
 
 {% if listing.description %}<p>{{ listing.description }}</p>{% endif %}
 
-{% if user and user.role == 'buyer' and listing.status == 'aktivni' and listing.seller_id != user.id %}
-  {% if my_offer %}
-    <p class="flash success">Imate ponudbo v čakanju v višini {{ my_offer.amount_eur|eur }}.
-      <a href="/buyer/offers">Pregled ponudb</a></p>
-  {% else %}
-    <h2>Oddaj ponudbo</h2>
-    <form method="post" action="/listings/{{ listing.id }}/offers" class="form">
-      <label>Znesek (EUR) <input name="amount_eur" required></label>
-      <label>Sporočilo <textarea name="message" rows="3"></textarea></label>
-      <button type="submit">Pošlji ponudbo</button>
-    </form>
-  {% endif %}
-{% elif not user %}
-  <p><a href="/auth/login">Prijavite se</a> kot kupec, da oddate ponudbo.</p>
-{% endif %}
-
 {% if user and user.role == 'seller' and listing.seller_id == user.id %}
   <p class="actions">
     <a href="/seller/listings/{{ listing.id }}/edit">Uredi</a>
