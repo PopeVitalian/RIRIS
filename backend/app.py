@@ -6,7 +6,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.sessions import SessionMiddleware
 
 from .auth import safe_user
-from .routers import auth, public
+from .routers import auth, public, seller
 from .settings import FRONTEND_DIR, SECRET_KEY, templates
 
 app = FastAPI(title="AvtoTrg")
@@ -15,6 +15,7 @@ app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR / "static")), name="
 
 app.include_router(auth.router)
 app.include_router(public.router)
+app.include_router(seller.router)
 
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
