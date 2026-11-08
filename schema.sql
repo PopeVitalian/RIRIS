@@ -5,7 +5,7 @@
 --   listings – oglasi (pripadajo prodajalcu)
 --   offers   – ponudbe (kupec -> oglas)
 -- Zagon:
---   docker exec -i pts-postgres psql -U avtotrg -d avtotrg_db < schema.sql
+--   docker exec -i avtotrg-postgres psql -U avtotrg -d avtotrg_db < schema.sql
 -- =========================================================
 
 -- Enumi (idempotentno).
