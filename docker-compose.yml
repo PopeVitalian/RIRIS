@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: avtotrg-postgres
+    environment:
+      POSTGRES_USER: avtotrg
+      POSTGRES_PASSWORD: avtotrg
+      POSTGRES_DB: avtotrg_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - avtotrg-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U avtotrg -d avtotrg_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  avtotrg-data:
+    name: avtotrg-pgdata
