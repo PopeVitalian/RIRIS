@@ -1,8 +1,8 @@
 # AvtoTrg – spletna platforma za trgovanje z rabljenimi avtomobili (RIRIS)
 
-Kupec odds **strukturirano ponudbo** na oglas, prodajalec jo **sprejme** (ob tem se vse ostale ponudbe na oglasu samodejno zavrnejo, oglas preide v `rezerviran`) ali **zavrne**. Po prodaji prodajalec oglas označi kot `prodan`.
+Kupec odda **strukturirano ponudbo** na oglas, prodajalec jo **sprejme** (ob tem se vse ostale ponudbe na oglasu samodejno zavrnejo, oglas preide v `rezerviran`) ali **zavrne**. Po prodaji prodajalec oglas označi kot `prodan`.
 
-## Stek
+## Tehnološki stack
 
 | Plast | Tehnologija |
 |---|---|
@@ -16,15 +16,15 @@ Kupec odds **strukturirano ponudbo** na oglas, prodajalec jo **sprejme** (ob tem
 
 ```
 
-pts-carmarket/
+RIRIS/
 ├── backend/
-│   ├── **init**.py
+│   ├── __init__.py
 │   ├── app.py               FastAPI instance + middleware + exception handler
 │   ├── settings.py          konfiguracija, baza, predloge, pomožne funkcije
 │   ├── models.py            User, Listing, Offer + hash/verify_password
 │   ├── auth.py              flash, get_current_user, require_role, ctx
 │   └── routers/
-│       ├── **init**.py
+│       ├── __init__.py
 │       ├── auth.py          register / login / logout
 │       ├── public.py        seznam oglasov, detajl, profil prodajalca, JSON API
 │       ├── buyer.py         oddaja ponudbe, pregled, umik
@@ -48,7 +48,7 @@ pts-carmarket/
 docker compose up -d
 
 # 2. Namesti odvisnosti
-conda activate RIRIS
+conda activate RIRIS    # ali generično: python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
 # 3. Naloži shemo
@@ -75,12 +75,11 @@ Naključni uporabniki imajo geslo `demo1234`.
 
 ## Vloge
 
-| Vloga ↕▾ | Ključ ↕▾ | Lahko ↕▾ | Ne more ↕▾ |
+| Vloga | Ključ | Lahko | Ne more |
 |---|---|---|---|
-| −Kupec | `buyer` | Brska, filtrira, odda ponudbo, umakne svojo ponudbo | Ne objavlja oglasov, ne vidi tujih ponudb |
+| Kupec | `buyer` | Brska, filtrira, odda ponudbo, umakne svojo ponudbo | Ne objavlja oglasov, ne vidi tujih ponudb |
 | Prodajalec | `seller` | Objavlja/ureja/briše svoje oglase, vidi prejete ponudbe, sprejema/zavrača | Ne vidi ponudb na tuje oglase |
 | Admin | `admin` | Pregleduje uporabnike in oglase, blokira/odblokira, spreminja vloge | Ne kupuje, ne prodaja, ne blokira drugega admina |
-⚙
 
 ## Poslovna pravila
 
