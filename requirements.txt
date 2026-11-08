@@ -1,0 +1,16 @@
+# Zaledje + obličje
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9   # branje HTML obrazcev
+Jinja2>=3.1.4
+itsdangerous>=2.2.0       # seje za flash sporočila
+
+# Podatkovna plast
+SQLAlchemy>=2.0.30
+psycopg2-binary>=2.9.9    # PostgreSQL gonilnik
+
+# Avtentikacija
+bcrypt>=4.0.0
+
+# Generiranje testnih podatkov
+Faker>=25.0.0

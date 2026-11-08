@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="sl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AvtoTrg{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <a href="/listings">AvtoTrg</a>
+    <nav>
+      <a href="/listings">Oglasi</a>
+      {% if user %}
+        {% if user.role == 'buyer' %}
+          <a href="/buyer/dashboard">Moj profil</a>
+          <a href="/buyer/offers">Moje ponudbe</a>
+        {% elif user.role == 'seller' %}
+          <a href="/seller/dashboard">Nadzorna plošča</a>
+          <a href="/seller/listings">Moji oglasi</a>
+          <a href="/seller/offers">Prejete ponudbe</a>
+        {% elif user.role == 'admin' %}
+          <a href="/admin/dashboard">Admin</a>
+          <a href="/admin/users">Uporabniki</a>
+          <a href="/admin/listings">Oglasi</a>
+        {% endif %}
+        <span class="who">{{ user.full_name }}</span>
+        <form class="inline" method="post" action="/auth/logout">
+          <button type="submit">Odjava</button>
+        </form>
+      {% else %}
+        <a href="/auth/login">Prijava</a>
+        <a href="/auth/register">Registracija</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main>
+    {% if messages %}
+      {% for m in messages %}
+        <p class="flash {{ m.category }}">{{ m.message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
