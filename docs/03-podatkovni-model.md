@@ -2,182 +2,125 @@
 
 ## Pregled
 
-Podatkovni model Parklja sestavlja 6 med seboj povezanih entitet:
-`User`, `Vehicle`, `ParkingLocation`, `ParkingSession`, `Penalty` in
-`Payment`. Vse entitete so shranjene v podatkovni bazi CockroachDB in
-dostopane prek SQLAlchemy.
+Podatkovni model AvtoTrga sestavljajo 3 med seboj povezane entitete: `User`, `Listing` in `Offer`. Vse entitete so shranjene v podatkovni bazi PostgreSQL in dostopane prek SQLAlchemy ORM.
 
 ## Entitete in glavna polja
 
 ### User
 
-Predstavlja vsakega uporabnika sistema – voznika, operaterja ali
-administratorja. Vloga je določena s poljem `role`.
+Predstavlja vsakega uporabnika sistema – kupca, prodajalca ali administratorja. Vloga je določena s poljem `role`.
 
 - `id` – primarni ključ
 - `email` – unikaten, uporablja se za prijavo
-- `password_hash` – zgoščeno geslo
-- `full_name` – ime in priimek
-- `role` – `driver`, `operator` ali `admin`
+- `password_hash` – zgoščeno geslo (bcrypt prek passlib)
+- `full_name` – ime in priimek (ali naziv avtohiše)
+- `phone` – telefon (neobvezno)
+- `city` – kraj
+- `role` – `buyer`, `seller` ali `admin`
+- `is_dealer` – ali gre za avtohišo (vpliva na prikaz)
 - `is_blocked` – ali je račun blokiran
 - `created_at` – čas registracije
 
-### Vehicle
+### Listing
 
-Vozilo, ki pripada vozniku. Voznik ima lahko več vozil.
+Oglas za posamezen avtomobil. Pripada natanko enemu prodajalcu.
 
 - `id` – primarni ključ
-- `user_id` – tuji ključ na `User` (lastnik)
-- `plate` – registrska tablica, unikatna
+- `seller_id` – tuji ključ na `User` (`ON DELETE CASCADE`)
 - `make` – znamka
 - `model` – model
-- `type` – tip vozila (za MVP samo `car`)
+- `year` – letnik (CHECK med 1950 in tekoče leto + 1)
+- `mileage_km` – prevoženi kilometri (CHECK ≥ 0)
+- `fuel` – `bencin`, `dizel`, `hibrid`, `električni`, `plin` (PostgreSQL ENUM)
+- `transmission` – `ročni`, `avtomatski` (PostgreSQL ENUM)
+- `price_eur` – cena v EUR (NUMERIC(10,2), CHECK > 0)
+- `status` – `aktivni`, `rezerviran`, `prodan` ali `blokiran` (PostgreSQL ENUM)
+- `description` – prost opis
+- `created_at` – čas objave
+- `updated_at` – čas zadnje spremembe
 
-### ParkingLocation
+### Offer
 
-Posamezno parkirišče v nekem mestu. Vsako parkirišče ima svojega
-operaterja in svojo urno ceno.
-
-- `id` – primarni ključ
-- `name` – ime parkirišča
-- `address` – naslov
-- `city` – mesto
-- `capacity` – število parkirnih mest
-- `hourly_rate` – urna cena v EUR
-- `operator_id` – tuji ključ na `User` (operater, ki upravlja to
-  parkirišče)
-- `is_active` – ali je parkirišče aktivno
-
-### ParkingSession
-
-Osrednja entiteta. Predstavlja eno parkiranje enega vozila na enem
-parkirišču.
+Ponudba, ki jo kupec odda na posamezen oglas. Ena ponudba pripada enemu kupcu in enemu oglasu.
 
 - `id` – primarni ključ
-- `user_id` – tuji ključ na `User` (voznik)
-- `vehicle_id` – tuji ključ na `Vehicle`
-- `location_id` – tuji ključ na `ParkingLocation`
-- `started_at` – čas začetka seje
-- `expected_end_at` – predvideni čas zaključka (za prikaz)
-- `ended_at` – dejanski čas zaključka (NULL, dokler seja traja)
-- `status` – `pending`, `active`, `completed` ali `cancelled`
-- `expected_fee` – predvideni znesek ob začetku seje (za prikaz)
-- `total_fee` – končni znesek, izračunan ob zaključku
-- `is_paid` – ali je seja plačana
-
-### Penalty
-
-Kazen, ki jo operater izda vozilu brez veljavne seje. Kazni se vežejo
-na vozilo in na voznika.
-
-- `id` – primarni ključ
-- `vehicle_id` – tuji ključ na `Vehicle`
-- `user_id` – tuji ključ na `User` (voznik, lastnik vozila)
-- `operator_id` – tuji ključ na `User` (operater, ki je kazen izdal)
-- `location_id` – tuji ključ na `ParkingLocation`
-- `reason` – `no_session`
-- `amount` – znesek kazni
-- `is_paid` – ali je kazen plačana
-- `issued_at` – čas izdaje
-
-### Payment
-
-Ločen zapis o plačilu seje. Za MVP je plačilo vedno simulirano –
-voznik samo označi sejo kot plačano, zato entiteta ne vsebuje podatkov
-o kartici ali načinu plačila.
-
-- `id` – primarni ključ
-- `session_id` – tuji ključ na `ParkingSession`
-- `amount` – plačani znesek
-- `paid_at` – čas plačila
+- `listing_id` – tuji ključ na `Listing` (`ON DELETE CASCADE`)
+- `buyer_id` – tuji ključ na `User`
+- `amount_eur` – ponujeni znesek (NUMERIC(10,2), CHECK > 0)
+- `message` – sporočilo kupca prodajalcu
+- `status` – `pending`, `accepted`, `rejected` ali `withdrawn` (PostgreSQL ENUM)
+- `created_at` – čas oddaje
+- `decided_at` – čas odločitve (sprejem/zavrnitev/umik); NULL, dokler je `pending`
 
 ## Povezave med entitetami
 
-- `User` 1 : N `Vehicle` – voznik ima lahko več vozil.
-- `User` 1 : N `ParkingSession` – voznik ima lahko več sej.
-- `User` 1 : N `ParkingLocation` – operater upravlja eno parkirišče
-  (v modelu je povezava 1:N, ker lahko administrator dodeli operaterja
-  tudi več parkiriščem, v MVP pa velja pravilo en operater – eno
-  parkirišče).
-- `User` 1 : N `Penalty` – kot voznik (prejemnik) in kot operater
-  (izdajatelj).
-- `Vehicle` 1 : N `ParkingSession`.
-- `Vehicle` 1 : N `Penalty`.
-- `ParkingLocation` 1 : N `ParkingSession`.
-- `ParkingLocation` 1 : N `Penalty`.
-- `ParkingSession` 1 : N `Payment` – za MVP ena seja, eno plačilo, v
-  modelu pa je povezava 1:N, da ostaja prostor za kasnejše delne
-  oziroma večkratne payment-e.
+- `User` 1 : N `Listing` – prodajalec ima lahko več oglasov.
+- `Listing` 1 : N `Offer` – na en oglas pride več ponudb.
+- `User` 1 : N `Offer` – kupec odda lahko več ponudb (tudi na različne oglase).
+
+Poslovno pravilo: v vsakem trenutku ima lahko posamezen oglas **največ eno `accepted` ponudbo**. Ko prodajalec eno ponudbo sprejme, sistem v isti transakciji preostale `pending` ponudbe na tem oglasu prestavi v `rejected`.
 
 ## Osnutek podatkovnega modela
 
 ```mermaid
 erDiagram
-    User ||--o{ Vehicle : owns
-    User ||--o{ ParkingSession : drives
-    User ||--o{ ParkingLocation : operates
-    User ||--o{ Penalty : receives
-    User ||--o{ Penalty : issues
-    Vehicle ||--o{ ParkingSession : used_in
-    Vehicle ||--o{ Penalty : has
-    ParkingLocation ||--o{ ParkingSession : hosts
-    ParkingLocation ||--o{ Penalty : issued_at
-    ParkingSession ||--o{ Payment : paid_by
+    User ||--o{ Listing : "objavi kot prodajalec"
+    User ||--o{ Offer : "odda kot kupec"
+    Listing ||--o{ Offer : "prejme"
 
     User {
-        int id PK
+        bigint id PK
         string email
         string password_hash
         string full_name
+        string phone
+        string city
         string role
+        bool is_dealer
         bool is_blocked
         datetime created_at
     }
-    Vehicle {
-        int id PK
-        int user_id FK
-        string plate
+    Listing {
+        bigint id PK
+        bigint seller_id FK
         string make
         string model
-        string type
-    }
-    ParkingLocation {
-        int id PK
-        string name
-        string address
-        string city
-        int capacity
-        decimal hourly_rate
-        int operator_id FK
-        bool is_active
-    }
-    ParkingSession {
-        int id PK
-        int user_id FK
-        int vehicle_id FK
-        int location_id FK
-        datetime started_at
-        datetime expected_end_at
-        datetime ended_at
+        int year
+        int mileage_km
+        string fuel
+        string transmission
+        decimal price_eur
         string status
-        decimal expected_fee
-        decimal total_fee
-        bool is_paid
+        text description
+        datetime created_at
+        datetime updated_at
     }
-    Penalty {
-        int id PK
-        int vehicle_id FK
-        int user_id FK
-        int operator_id FK
-        int location_id FK
-        string reason
-        decimal amount
-        bool is_paid
-        datetime issued_at
+    Offer {
+        bigint id PK
+        bigint listing_id FK
+        bigint buyer_id FK
+        decimal amount_eur
+        text message
+        string status
+        datetime created_at
+        datetime decided_at
     }
-    Payment {
-        int id PK
-        int session_id FK
-        decimal amount
-        datetime paid_at
-    }
+```
+
+## Omejitve na ravni baze
+
+- `users.email` – UNIQUE.
+- `listings.seller_id` – FOREIGN KEY → `users.id` ON DELETE CASCADE.
+- `offers.listing_id` – FOREIGN KEY → `listings.id` ON DELETE CASCADE.
+- `offers.buyer_id` – FOREIGN KEY → `users.id` ON DELETE RESTRICT (kupca z zgodovino ponudb se ne briše, le blokira).
+- `listings.year` – CHECK BETWEEN 1950 AND (extract year from now()) + 1.
+- `listings.price_eur` – CHECK > 0.
+- `listings.mileage_km` – CHECK ≥ 0.
+- `offers.amount_eur` – CHECK > 0.
+- `offers.status` – ENUM z vrednostmi `pending|accepted|rejected|withdrawn`.
+- Delni indeks `idx_listings_active` na `listings(created_at DESC) WHERE status = 'aktivni'` – pokriva najpogostejšo poizvedbo.
+- Delni indeks `idx_offers_pending` na `offers(listing_id) WHERE status = 'pending'` – pokriva pregled ponudb prodajalca.
+
+## Denar in NUMERIC
+
+Vse cene in zneski ponudb so shranjeni kot `NUMERIC(10,2)`, ne `FLOAT`. Plavajoča vejica ne predstavlja denarja točno; pri seštevanju in primerjanju cen to povzroči napake v zaokroževanju.
