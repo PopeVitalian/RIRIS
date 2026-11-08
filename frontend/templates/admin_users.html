@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Uporabniki – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Uporabniki</h1>
+
+<form class="search" method="get" action="/admin/users">
+  <label>Iskanje po e-pošti <input name="q" value="{{ q }}"></label>
+  <button type="submit">Išči</button>
+  {% if q %}<a href="/admin/users">Počisti</a>{% endif %}
+</form>
+
+<table>
+  <tr>
+    <th>E-pošta</th><th>Ime</th><th>Vloga</th><th>Blokiran</th><th>Registriran</th><th>Dejanja</th>
+  </tr>
+  {% for u in users %}
+  <tr>
+    <td>{{ u.email }}</td>
+    <td>{{ u.full_name }}{% if u.is_dealer %} <small>(avtohiša)</small>{% endif %}</td>
+    <td>
+      <form method="post" action="/admin/users/{{ u.id }}/role" class="inline">
+        <select name="new_role" {% if u.id == user.id %}disabled{% endif %}>
+          {% for r in ['buyer','seller','admin'] %}
+          <option value="{{ r }}" {% if u.role == r %}selected{% endif %}>{{ r }}</option>
+          {% endfor %}
+        </select>
+        {% if u.id != user.id %}
+        <button type="submit">Spremeni</button>
+        {% endif %}
+      </form>
+    </td>
+    <td>{% if u.is_blocked %}da{% else %}ne{% endif %}</td>
+    <td>{{ u.created_at.strftime("%d. %m. %Y") }}</td>
+    <td class="actions">
+      {% if u.id != user.id and u.role != 'admin' %}
+        {% if u.is_blocked %}
+        <form method="post" action="/admin/users/{{ u.id }}/unblock" class="inline">
+          <button type="submit">Odblokiraj</button>
+        </form>
+        {% else %}
+        <form method="post" action="/admin/users/{{ u.id }}/block" class="inline">
+          <button type="submit">Blokiraj</button>
+        </form>
+        {% endif %}
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6">Ni uporabnikov.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
