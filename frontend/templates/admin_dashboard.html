@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Admin – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Admin nadzorna plošča</h1>
+
+<div class="stats">
+  <div class="stat"><div class="label">Uporabniki</div><div class="value">{{ stats.users }}</div></div>
+  <div class="stat"><div class="label">Oglasi</div><div class="value">{{ stats.listings }}</div></div>
+  <div class="stat"><div class="label">Ponudbe</div><div class="value">{{ stats.offers }}</div></div>
+</div>
+
+<p>
+  <a href="/admin/users">Upravljaj uporabnike</a> ·
+  <a href="/admin/listings">Upravljaj oglase</a>
+</p>
+{% endblock %}
