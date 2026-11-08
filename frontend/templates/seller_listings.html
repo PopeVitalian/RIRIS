@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Moji oglasi – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Moji oglasi</h1>
+<p><a href="/seller/listings/new">+ Objavi nov oglas</a></p>
+
+<table>
+  <tr><th>Avto</th><th>Letnik</th><th>Cena</th><th>Status</th><th>Dejanja</th></tr>
+  {% for l in listings %}
+  <tr>
+    <td><a href="/listings/{{ l.id }}">{{ l.make }} {{ l.model }}</a></td>
+    <td>{{ l.year }}</td>
+    <td>{{ l.price_eur|eur }}</td>
+    <td><span class="badge {{ l.status }}">{{ l.status }}</span></td>
+    <td class="actions">
+      {% if l.status != 'prodan' %}
+      <a href="/seller/listings/{{ l.id }}/edit">Uredi</a>
+      {% endif %}
+      <form method="post" action="/seller/listings/{{ l.id }}/delete" class="inline">
+        <button type="submit">Izbriši</button>
+      </form>
+      {% if l.status == 'rezerviran' %}
+      <form method="post" action="/seller/listings/{{ l.id }}/sold" class="inline">
+        <button type="submit">Označi kot prodan</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="5">Nimate še nobenega oglasa.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Oglasi – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Oglasi ({{ total }})</h1>
+
+<form class="search" method="get" action="/listings">
+  <label>Iskanje
+    <input type="text" name="q" value="{{ q }}" placeholder="Znamka ali model">
+  </label>
+  <label>Gorivo
+    <select name="fuel">
+      <option value="">— vsa —</option>
+      {% for f in fuels %}
+      <option value="{{ f }}" {% if fuel == f %}selected{% endif %}>{{ f }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Cena od (€)
+    <input type="text" name="min_price" value="{{ min_price }}" size="8">
+  </label>
+  <label>Cena do (€)
+    <input type="text" name="max_price" value="{{ max_price }}" size="8">
+  </label>
+  <button type="submit">Filtriraj</button>
+  {% if q or fuel or min_price or max_price %}<a href="/listings">Počisti</a>{% endif %}
+</form>
+
+<table>
+  <tr><th>Avto</th><th>Letnik</th><th>Prevoženo</th><th>Gorivo</th><th>Cena</th><th>Prodajalec</th></tr>
+  {% for l in listings %}
+  <tr>
+    <td><a href="/listings/{{ l.id }}">{{ l.make }} {{ l.model }}</a></td>
+    <td>{{ l.year }}</td>
+    <td>{{ l.mileage_km|km }}</td>
+    <td>{{ l.fuel }}</td>
+    <td>{{ l.price_eur|eur }}</td>
+    <td><a href="/sellers/{{ l.seller.id }}">{{ l.seller.full_name }}</a></td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6">Ni oglasov.</td></tr>
+  {% endfor %}
+</table>
+
+<p class="pager">
+  {% if prev_url %}<a href="{{ prev_url }}">Prejšnja</a>{% endif %}
+  Stran {{ page }} / {{ last_page }}
+  {% if next_url %}<a href="{{ next_url }}">Naslednja</a>{% endif %}
+</p>
+{% endblock %}

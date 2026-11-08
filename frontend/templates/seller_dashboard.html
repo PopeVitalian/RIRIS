@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Nadzorna plošča – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Pozdravljeni, {{ user.full_name }}</h1>
+
+<div class="stats">
+  <div class="stat"><div class="label">Aktivni oglasi</div><div class="value">{{ active_count }}</div></div>
+  <div class="stat"><div class="label">Ponudbe (30 dni)</div><div class="value">{{ recent_offers }}</div></div>
+  <div class="stat"><div class="label">Sprejete (30 dni)</div><div class="value">{{ accepted_offers }}</div></div>
+</div>
+
+<p>
+  <a href="/seller/listings/new">Objavi nov oglas</a> ·
+  <a href="/seller/listings">Vsi moji oglasi</a> ·
+  <a href="/seller/offers">Prejete ponudbe</a>
+</p>
+
+<h2>Zadnjih 10 oglasov</h2>
+<table>
+  <tr><th>Avto</th><th>Cena</th><th>Status</th><th>Objavljeno</th></tr>
+  {% for l in my_listings %}
+  <tr>
+    <td><a href="/listings/{{ l.id }}">{{ l.make }} {{ l.model }}</a></td>
+    <td>{{ l.price_eur|eur }}</td>
+    <td><span class="badge {{ l.status }}">{{ l.status }}</span></td>
+    <td>{{ l.created_at.strftime("%d. %m. %Y") }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="4">Nimate še nobenega oglasa.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

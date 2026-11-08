@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ "Uredi oglas" if listing else "Nov oglas" }} – AvtoTrg{% endblock %}
+{% block content %}
+<h1>{{ "Uredi oglas" if listing else "Nov oglas" }}</h1>
+
+<form method="post" action="{{ form_action }}" class="form">
+  <label>Znamka <input name="make" required value="{{ listing.make if listing else '' }}"></label>
+  <label>Model <input name="model" required value="{{ listing.model if listing else '' }}"></label>
+  <label>Letnik <input name="year" type="number" required value="{{ listing.year if listing else '' }}"></label>
+  <label>Prevoženo (km) <input name="mileage_km" type="number" min="0" required value="{{ listing.mileage_km if listing else '' }}"></label>
+  <label>Gorivo
+    <select name="fuel">
+      {% for f in fuels %}
+      <option value="{{ f }}" {% if listing and listing.fuel == f %}selected{% endif %}>{{ f }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Menjalnik
+    <select name="transmission">
+      {% for t in transmissions %}
+      <option value="{{ t }}" {% if listing and listing.transmission == t %}selected{% endif %}>{{ t }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Cena (€) <input name="price_eur" required value="{{ listing.price_eur if listing else '' }}"></label>
+  <label>Opis <textarea name="description" rows="4">{{ listing.description if listing else '' }}</textarea></label>
+  <button type="submit">{{ "Shrani" if listing else "Objavi" }}</button>
+</form>
+{% endblock %}

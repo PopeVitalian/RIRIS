@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Oglasi (admin) – AvtoTrg{% endblock %}
+{% block content %}
+<h1>Vsi oglasi</h1>
+
+<form class="search" method="get" action="/admin/listings">
+  <label>Iskanje <input name="q" value="{{ q }}" placeholder="Znamka ali model"></label>
+  <button type="submit">Išči</button>
+  {% if q %}<a href="/admin/listings">Počisti</a>{% endif %}
+</form>
+
+<table>
+  <tr><th>Avto</th><th>Prodajalec</th><th>Cena</th><th>Status</th><th>Objavljen</th><th>Dejanja</th></tr>
+  {% for l in listings %}
+  <tr>
+    <td><a href="/listings/{{ l.id }}">{{ l.make }} {{ l.model }}</a></td>
+    <td>{{ l.seller.full_name }}</td>
+    <td>{{ l.price_eur|eur }}</td>
+    <td><span class="badge {{ l.status }}">{{ l.status }}</span></td>
+    <td>{{ l.created_at.strftime("%d. %m. %Y") }}</td>
+    <td class="actions">
+      {% if l.status != 'blokiran' %}
+      <form method="post" action="/admin/listings/{{ l.id }}/block" class="inline">
+        <button type="submit">Blokiraj</button>
+      </form>
+      {% endif %}
+      <form method="post" action="/admin/listings/{{ l.id }}/delete" class="inline">
+        <button type="submit">Izbriši</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6">Ni oglasov.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

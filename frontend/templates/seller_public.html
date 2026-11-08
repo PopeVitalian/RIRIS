@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ seller.full_name }} – AvtoTrg{% endblock %}
+{% block content %}
+<p><a href="/listings">← Nazaj na oglase</a></p>
+<h1>{{ seller.full_name }}
+  {% if seller.is_dealer %}<span class="badge seller">avtohiša</span>{% endif %}
+</h1>
+
+<dl>
+  <dt>Kraj</dt><dd>{{ seller.city }}</dd>
+  <dt>Telefon</dt><dd>{{ seller.phone or '—' }}</dd>
+  <dt>Registriran</dt><dd>{{ seller.created_at.strftime("%d. %m. %Y") }}</dd>
+</dl>
+
+<h2>Aktivni oglasi ({{ listings|length }})</h2>
+<table>
+  <tr><th>Avto</th><th>Letnik</th><th>Cena</th></tr>
+  {% for l in listings %}
+  <tr>
+    <td><a href="/listings/{{ l.id }}">{{ l.make }} {{ l.model }}</a></td>
+    <td>{{ l.year }}</td>
+    <td>{{ l.price_eur|eur }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="3">Ta prodajalec nima aktivnih oglasov.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
